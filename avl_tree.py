@@ -32,8 +32,6 @@ class AVL_tree:
 
     def rotate_left(self, Node):
 
-        print('HELLO L ', Node.value)
-
         a = Node.right
         b = a.left
 
@@ -79,8 +77,6 @@ class AVL_tree:
 
 
     def rotate_right(self, Node):
-
-        print('HELLO R ', Node.value)
         a = Node.left
         b = a.right
 
@@ -202,3 +198,26 @@ class AVL_tree:
 
         self.preorder(root.right)
     
+
+def main():
+    f = open('data.txt','r')
+    file_data = f.readline()
+    data = file_data.split(' ')
+    print(data)
+
+    Tree = AVL_tree()
+    rt = None
+    i = 0
+    while i <= len(data) - 1:
+        if data[i] == 'k':
+            i += 1
+            rt = Tree.insert(int(data[i]), rt)
+        elif data[i] == 'm':
+            i += 1
+            print('m = ', Tree.m_request(rt, int(data[i]) - 1))
+        elif data[i] == 'n':
+            i += 1
+            print('n = ',Tree.n_request(rt, int(data[i]), 0))
+        i += 1
+
+main()
