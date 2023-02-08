@@ -1,5 +1,3 @@
-import re 
-
 def max(a, b):
     if a >= b:
         return a
@@ -23,6 +21,7 @@ class AVL_tree:
             for i in args:
                 self.root = self.insert(i, self.root)
         
+
     def get_height(self, Node):
         if Node is None:
             return 0
@@ -39,7 +38,6 @@ class AVL_tree:
 
 
     def rotate_left(self, Node):
-
         a = Node.right
         b = a.left
 
@@ -73,10 +71,9 @@ class AVL_tree:
         Node.height = 1 + max(self.get_height(Node.left), self.get_height(Node.right))
         a.height = 1 + max(self.get_height(a.left), self.get_height(a.right))
 
-
-       
         a.size = c_size + b_size + d_size + 1 + koef
         Node.size = node_size - a_size  - 1 + b_size + k_b
+
 
         return a
 
@@ -112,10 +109,8 @@ class AVL_tree:
         a.right = Node 
         Node.left = b
 
-
         Node.height = 1 + max(self.get_height(Node.left), self.get_height(Node.right))
         a.height = 1 + max(self.get_height(a.left), self.get_height(a.right))
-
 
         a.size = c_size + b_size + d_size + 1 + koef
         Node.size = node_size - a_size  - 1 + b_size + k_b
@@ -127,16 +122,18 @@ class AVL_tree:
     def insert(self, v, root):
         if root is None:
             return Node(v)
-        
-        
-        elif v <= root.value:
+
+        elif v == root.value: 
+            pass
+
+        elif v < root.value:
             root.size += 1
             root.left = self.insert(v, root.left)
            
-        elif v > root.value: ########################################
+        elif v > root.value: 
             root.size += 1
             root.right = self.insert(v, root.right)
-            
+        
         root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
         balance = self.checking_balance(root)
 
@@ -153,6 +150,7 @@ class AVL_tree:
             elif root.right.value > v:
                 root.right = self.rotate_right(root.right)
                 return self.rotate_left(root)
+
 
         self.root = root
         return root
@@ -206,8 +204,7 @@ class AVL_tree:
     def preorder(self, root):
         if root is None:
             return "Tree is empty"
-
-        #print('value is ',root.value)
+        print('value is ',root.value)
         self.preorder(root.left)
         self.preorder(root.right)
     
@@ -225,7 +222,7 @@ class AVL_tree:
 
 
     def __del__(self):
-        print('Tree destroyed')
+        return 'Tree destroyed'
 
 
 def main(text_data):
@@ -241,47 +238,21 @@ def main(text_data):
         elif data[i] == 'm':
             i += 1
             m = Tree.m_request(rt, int(data[i]) - 1)
-            # print('m = ', m)
             res.append(m)
 
         elif data[i] == 'n':
             i += 1
             n = Tree.n_request(rt, int(data[i]),0)
-            # print('n = ',n)
             res.append(n)
         i += 1
 
     result = ''
     for i in res:
-        # print(i)
         result += ' ' + str(i) 
+
+
     return result[1::]
 
 
-#f = open('data.txt','r')
-#file_data = f.readline()
-
-txt_data = input()
-pattern = '(([mnk]\s[-]?\d+)\s)*[mnk]\s[-]?\d+'
-
-match = re.fullmatch(pattern, txt_data) 
-print('YES' if match else 'NO') 
-
-print(main(txt_data))
-
-#rt = None
-#Tree = AVL_tree(1,2,3,4)
-#rt = Tree.root
-#rt = Tree.insert(5, rt)
-#rt = Tree.insert(6, rt)
-#rt = Tree.insert(7, rt)
-#rt = Tree.insert(8, rt)
-
-#Tree.preorder(rt)
-
-#print(Tree.__next__())
-
-#for i in Tree:
-    #print('i = ',i)
-
-
+#Tree = AVL_tree(1, 2, 3, 4, 5, 6, 4, 4, 6)
+#Tree.preorder(Tree.root)
