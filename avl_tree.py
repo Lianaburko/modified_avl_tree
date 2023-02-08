@@ -1,3 +1,5 @@
+import re 
+
 def max(a, b):
     if a >= b:
         return a
@@ -76,9 +78,6 @@ class AVL_tree:
         a.size = c_size + b_size + d_size + 1 + koef
         Node.size = node_size - a_size  - 1 + b_size + k_b
 
-        print('val = ', a.value, 'size = ', a.size)
-        print('val = ', Node.value, 'size = ', Node.size)
-        
         return a
 
 
@@ -166,11 +165,18 @@ class AVL_tree:
             r_l = root.left.size + 1
 
         if r_l > k:
-            return(self.m_request(root.left, k))
+            try:
+                req = self.m_request(root.left, k)
+            except AttributeError:
+                req = "This request has mistake. The first position is 1. And it is " + str(root.value)
+            return req
         elif r_l < k:
-            return(self.m_request(root.right,k -  r_l - 1))
+            try: 
+                req = self.m_request(root.right, k -  r_l - 1)
+            except AttributeError:   
+                req = "This request has mistake. There are less amount of numbers. Last number is " + str(root.value)
+            return(req)
         else:
-            #print('r_v = ', root.value)
             return root.value
 
         
@@ -201,7 +207,7 @@ class AVL_tree:
         if root is None:
             return "Tree is empty"
 
-        print('value is ',root.value)
+        #print('value is ',root.value)
         self.preorder(root.left)
         self.preorder(root.right)
     
@@ -222,8 +228,8 @@ class AVL_tree:
         print('Tree destroyed')
 
 
-def main(file_data):
-    data = file_data.split(' ')
+def main(text_data):
+    data = text_data.split(' ') 
     Tree = AVL_tree()
     res = []
     rt = None
@@ -235,35 +241,47 @@ def main(file_data):
         elif data[i] == 'm':
             i += 1
             m = Tree.m_request(rt, int(data[i]) - 1)
-            print('m = ', m)
+            # print('m = ', m)
             res.append(m)
 
         elif data[i] == 'n':
             i += 1
             n = Tree.n_request(rt, int(data[i]),0)
-            print('n = ',n)
+            # print('n = ',n)
             res.append(n)
         i += 1
 
-    return res
+    result = ''
+    for i in res:
+        # print(i)
+        result += ' ' + str(i) 
+    return result[1::]
 
 
-f = open('data.txt','r')
-file_data = f.readline()
+#f = open('data.txt','r')
+#file_data = f.readline()
 
-print(main(file_data))
+txt_data = input()
+pattern = '(([mnk]\s[-]?\d+)\s)*[mnk]\s[-]?\d+'
 
-rt = None
-Tree = AVL_tree(1,2,3,4)
-rt = Tree.root
-rt = Tree.insert(5, rt)
-rt = Tree.insert(6, rt)
-rt = Tree.insert(7, rt)
-rt = Tree.insert(8, rt)
+match = re.fullmatch(pattern, txt_data) 
+print('YES' if match else 'NO') 
 
-Tree.preorder(rt)
+print(main(txt_data))
+
+#rt = None
+#Tree = AVL_tree(1,2,3,4)
+#rt = Tree.root
+#rt = Tree.insert(5, rt)
+#rt = Tree.insert(6, rt)
+#rt = Tree.insert(7, rt)
+#rt = Tree.insert(8, rt)
+
+#Tree.preorder(rt)
 
 #print(Tree.__next__())
 
-for i in Tree:
-    print('i = ',i)
+#for i in Tree:
+    #print('i = ',i)
+
+
