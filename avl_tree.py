@@ -15,6 +15,12 @@ class Node:
 
 
 class AVL_tree: 
+    def __init__(self, *args):
+        self.root = None
+        if args != None:
+            for i in args:
+                self.root = self.insert(i, self.root)
+        
     def get_height(self, Node):
         if Node is None:
             return 0
@@ -122,6 +128,8 @@ class AVL_tree:
     def insert(self, v, root):
         if root is None:
             return Node(v)
+        
+        
         elif v <= root.value:
             root.size += 1
             root.left = self.insert(v, root.left)
@@ -147,6 +155,7 @@ class AVL_tree:
                 root.right = self.rotate_right(root.right)
                 return self.rotate_left(root)
 
+        self.root = root
         return root
 
 
@@ -187,25 +196,36 @@ class AVL_tree:
                 return n + root.left.size + 1
             
 
+
     def preorder(self, root):
         if root is None:
-            return
+            return "Tree is empty"
 
         print('value is ',root.value)
-        print('size is ',root.size) 
         self.preorder(root.left)
-        print('----------------')
-
         self.preorder(root.right)
     
 
-def main():
-    f = open('data.txt','r')
-    file_data = f.readline()
-    data = file_data.split(' ')
-    print(data)
+    def _inorder(self, root):
+        if root.left:
+            yield from self._inorder(root.left)
+        yield root.value
+        if root.right:
+            yield from self._inorder(root.right)
 
+    def __iter__(self):
+        for i in self._inorder(self.root):
+            yield i
+
+
+    def __del__(self):
+        print('Tree destroyed')
+
+
+def main(file_data):
+    data = file_data.split(' ')
     Tree = AVL_tree()
+    res = []
     rt = None
     i = 0
     while i <= len(data) - 1:
@@ -214,11 +234,36 @@ def main():
             rt = Tree.insert(int(data[i]), rt)
         elif data[i] == 'm':
             i += 1
-            print('m = ', Tree.m_request(rt, int(data[i]) - 1))
+            m = Tree.m_request(rt, int(data[i]) - 1)
+            print('m = ', m)
+            res.append(m)
+
         elif data[i] == 'n':
             i += 1
-            print('n = ',Tree.n_request(rt, int(data[i]), 0))
+            n = Tree.n_request(rt, int(data[i]),0)
+            print('n = ',n)
+            res.append(n)
         i += 1
 
-main()
+    return res
 
+
+f = open('data.txt','r')
+file_data = f.readline()
+
+print(main(file_data))
+
+rt = None
+Tree = AVL_tree(1,2,3,4)
+rt = Tree.root
+rt = Tree.insert(5, rt)
+rt = Tree.insert(6, rt)
+rt = Tree.insert(7, rt)
+rt = Tree.insert(8, rt)
+
+Tree.preorder(rt)
+
+#print(Tree.__next__())
+
+for i in Tree:
+    print('i = ',i)
